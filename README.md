@@ -29,7 +29,7 @@ How to use
 --------------
 
 ```sh
-require('LESS-Recursive-Compiler').compile(lessDirPath, compiledDirPath, [options])
+require('less-recursive-compiler').compile(lessDirPath, compiledDirPath, [options])
 ```
 The options are very similar to the [Recess] programatic api options.
 
