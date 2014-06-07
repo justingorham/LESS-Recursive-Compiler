@@ -1,0 +1,21 @@
+{
+  "name": "LESS-Recursive-Compiler",
+  "version": "0.0.0",
+  "description": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "LESS",
+    "CSS",
+    "compile",
+    "compiler"
+  ],
+  "author": "Justin Gorham <justingorham@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mkdirp": "^0.5.0",
+    "recess": "^1.1.9"
+  }
+}
