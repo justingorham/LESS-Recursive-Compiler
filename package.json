@@ -1,6 +1,6 @@
 {
   "name": "LESS-Recursive-Compiler",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "0.0.1",
   "main": "index.js",
   "scripts": {
@@ -17,5 +17,14 @@
   "dependencies": {
     "mkdirp": "^0.5.0",
     "recess": "^1.1.9"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/justingorham/LESS-Recursive-Compiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/justingorham/LESS-Recursive-Compiler/issues"
+  },
+  "homepage": "https://github.com/justingorham/LESS-Recursive-Compiler"
 }
