@@ -7,7 +7,7 @@ LESS-Recursive-Compiler is a node module that programatically compiles all of th
 Version
 ----
 
-0.0.2
+0.0.3
 
 Tech
 -----------

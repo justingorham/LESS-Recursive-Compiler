@@ -1,6 +1,7 @@
 var fs = require('fs'),
     recess = require('recess'),
-    getDirName = require("path").dirname,
+    path = require('path'),
+    getDirName = path.dirname,
     mkdirp = require('mkdirp');
 
 var walk = function (dir, done) {
@@ -41,8 +42,8 @@ compileObject.compile = function (lessPath, compilePath, options) {
         var transForms = {};
         //Gennerate new file names
         results.forEach(function (result) {
-            var newFile = result.replace(lessPath, compilePath)
-                .replace('.less', '.css');
+            var newFile = path.normalize(result.replace(lessPath, compilePath)
+                .replace('.less', '.css'));
             mkdirp.sync(getDirName(newFile));
             recess(result, opt, function (err, obj) {
                 if (err) {
