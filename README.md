@@ -1,7 +1,7 @@
 LESS-Recursive-Compiler
 =========
 
-LESS-Recursive-Compiler is a node module that programatically compiles all of the LESS or CSS files in a specifid directory and places them all in another specified directory with the same strucutre as the source direcotry.
+LESS-Recursive-Compiler is a node module that programatically compiles all of the LESS or CSS files in a specified directory and places them all in another specified directory with the same strucutre as the source direcotry.
 
 
 Version
