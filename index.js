@@ -24,7 +24,7 @@ var shouldIgnoreFile = function (file) {
         var startIndex = ignoreFileArgs.indexOf(stFileArgs[0]);
         if (startIndex > -1 && ignoreFileArgs.length >= stFileArgs.length + startIndex) {
             // possible math. lets try it
-            var slice = ignoreFileArgs.slice(startIndex, stFileArgs.length);
+            var slice = ignoreFileArgs.slice(startIndex, ignoreFileArgs.length);
 
             if (_.isEqual(slice, stFileArgs))
                 return true;
