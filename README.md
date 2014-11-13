@@ -7,10 +7,13 @@ LESS-Recursive-Compiler is a node module that programatically compiles all of th
 Version
 ----
 
-0.0.4
+0.0.5
 
 Updates
 -----------
+0.0.5
+* Improving the buggy ignore file/dir functionality
+
 0.0.4
 * added functionality to exclude some directories and files in the lessDirPath directory.
 

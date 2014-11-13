@@ -1,6 +1,6 @@
 {
   "name": "less-recursive-compiler",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Node module that recursively compiles all LESS files in a directory",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,8 @@
   "license": "MIT",
   "dependencies": {
     "mkdirp": "^0.5.0",
-    "recess": "^1.1.9"
+    "recess": "^1.1.9",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {},
   "repository": {

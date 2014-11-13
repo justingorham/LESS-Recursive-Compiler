@@ -2,21 +2,35 @@ var fs = require('fs'),
     recess = require('recess'),
     path = require('path'),
     getDirName = path.dirname,
-    mkdirp = require('mkdirp');
+    mkdirp = require('mkdirp'),
+    _ = require('underscore');
 
 var lessExt = /.*\.less$|.*\.css/;
 var baseDir, ignoreList;
 
-var shouldIgnoreFile = function(file){
+var shouldIgnoreFile = function (file) {
     var stFile = path.normalize(file.trim().toLowerCase());
     var index = stFile.indexOf(baseDir);
-    if(index >=0 )
+    if (index >= 0)
         stFile = stFile.substring(index + baseDir.length);
-    if(stFile.charAt(0) === path.sep){
+    if (stFile.charAt(0) === path.sep) {
         stFile = stFile.substring(1)
     }
-    var basename = path.basename(stFile);
-    return ignoreList.indexOf(stFile) > -1 || ignoreList.indexOf(basename) > -1;
+    var stFileArgs = stFile.split(path.sep);
+    for (var i = 0; i < ignoreList.length; i++) {
+        var ignoreFile = ignoreList[i];
+        if(path.basename(stFile) === ignoreFile) return true;
+        var ignoreFileArgs = ignoreFile.split(path.sep);
+        var startIndex = ignoreFileArgs.indexOf(stFileArgs[0]);
+        if (startIndex > -1 && ignoreFileArgs.length >= stFileArgs.length + startIndex) {
+            // possible math. lets try it
+            var slice = ignoreFileArgs.slice(startIndex, stFileArgs.length);
+
+            if (_.isEqual(slice, stFileArgs))
+                return true;
+        }
+    }
+    return false;
 };
 
 var walk = function (dir, done) {
@@ -28,22 +42,23 @@ var walk = function (dir, done) {
             var file = list[i++];
             if (!file) return done(null, results);
             file = dir + '/' + file;
-            if(shouldIgnoreFile(file)){
+            if (shouldIgnoreFile(file)) {
                 next();
-            }else{
-            fs.stat(file, function (err, stat) {
-                if (stat && stat.isDirectory()) {
-                    walk(file, function (err, res) {
-                        results = results.concat(res);
+            } else {
+                fs.stat(file, function (err, stat) {
+                    if (stat && stat.isDirectory()) {
+                        walk(file, function (err, res) {
+                            results = results.concat(res);
+                            next();
+                        });
+                    } else {
+                        if (lessExt.test(file)) {
+                            results.push(file);
+                        }
                         next();
-                    });
-                } else {
-                    if (lessExt.test(file)) {
-                        results.push(file);
                     }
-                    next();
-                }
-            });}
+                });
+            }
         })();
     });
 };
@@ -54,9 +69,9 @@ compileObject.compile = function (lessPath, compilePath, options) {
     var opt = options || {};
     opt.compile = true;
     ignoreList = opt.ignoreList || [];
-    ignoreList.forEach(function(element, index, array){
+    ignoreList.forEach(function (element, index, array) {
         var stFile = path.normalize(element.trim().toLowerCase());
-        if(stFile.charAt(0) === path.sep){
+        if (stFile.charAt(0) === path.sep) {
             stFile = stFile.substring(1)
         }
         array[index] = stFile;
@@ -84,8 +99,6 @@ compileObject.compile = function (lessPath, compilePath, options) {
                 }
             });
         });
-
-
     });
 };
 
