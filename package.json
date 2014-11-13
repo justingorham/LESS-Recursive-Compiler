@@ -1,6 +1,6 @@
 {
   "name": "less-recursive-compiler",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Node module that recursively compiles all LESS files in a directory",
   "main": "index.js",
   "scripts": {
