@@ -1,36 +1,19 @@
 var fs = require('fs'),
+    globby = require('globby'),
     recess = require('recess'),
     path = require('path'),
     getDirName = path.dirname,
     mkdirp = require('mkdirp'),
-    _ = require('underscore');
+    S = require('string');
+_ = require('underscore');
 
 var lessExt = /.*\.less$|.*\.css/;
 var baseDir, ignoreList;
 
 var shouldIgnoreFile = function (file) {
-    var stFile = path.normalize(file.trim().toLowerCase());
-    var index = stFile.indexOf(baseDir);
-    if (index >= 0)
-        stFile = stFile.substring(index + baseDir.length);
-    if (stFile.charAt(0) === path.sep) {
-        stFile = stFile.substring(1)
-    }
-    var stFileArgs = stFile.split(path.sep);
-    for (var i = 0; i < ignoreList.length; i++) {
-        var ignoreFile = ignoreList[i];
-        if(path.basename(stFile) === ignoreFile) return true;
-        var ignoreFileArgs = ignoreFile.split(path.sep);
-        var startIndex = ignoreFileArgs.indexOf(stFileArgs[0]);
-        if (startIndex > -1 && ignoreFileArgs.length >= stFileArgs.length + startIndex) {
-            // possible math. lets try it
-            var slice = ignoreFileArgs.slice(startIndex, ignoreFileArgs.length);
-
-            if (_.isEqual(slice, stFileArgs))
-                return true;
-        }
-    }
-    return false;
+    var stFile = file.trim().toLowerCase();
+    stFile = S(stFile.trim().toLowerCase()).replaceAll(path.sep, '/').toString();
+    return ignoreList.indexOf(stFile) > -1;
 };
 
 var walk = function (dir, done) {
@@ -68,37 +51,56 @@ var compileObject = {};
 compileObject.compile = function (lessPath, compilePath, options) {
     var opt = options || {};
     opt.compile = true;
-    ignoreList = opt.ignoreList || [];
-    ignoreList.forEach(function (element, index, array) {
-        var stFile = path.normalize(element.trim().toLowerCase());
-        if (stFile.charAt(0) === path.sep) {
-            stFile = stFile.substring(1)
-        }
-        array[index] = stFile;
-    });
+
     var stdLessPath = baseDir = path.normalize(lessPath.trim().toLowerCase());
     var stdCompilePath = path.normalize(compilePath.trim().toLowerCase());
-    walk(stdLessPath, function (err, results) {
-        if (err) throw err;
-        //Gennerate new file names
-        results.forEach(function (result) {
-            var newFile = path.normalize(result.replace(stdLessPath, stdCompilePath)
-                .replace('.less', '.css'));
-            mkdirp.sync(getDirName(newFile));
-            recess(result, opt, function (err, obj) {
-                if (err) {
-                    console.error(err);
-                } else {
-                    fs.writeFile(newFile, obj[0].output, function (err) {
+
+    var tempIgnoreList = opt.ignoreList || [];
+    tempIgnoreList.forEach(function (element, index, array) {
+        var stFile = S(path.normalize(element.trim().toLowerCase())).replaceAll(path.sep, '/').toString();
+        if (stFile.indexOf('/') === 0)
+            stFile = stFile.substring(1);
+        console.log(stFile);
+        array[index] = stFile;
+    });
+
+    var standardizedLessPath = S(stdLessPath).replaceAll(path.sep, '/').toString();
+
+    globby(tempIgnoreList, {
+        cwd: standardizedLessPath
+    }, function (err, paths) {
+        if (err) {
+            throw err;
+        } else {
+            ignoreList = paths.slice(0);
+            ignoreList.forEach(function (element, index, array) {
+                var stFile = S(path.join(standardizedLessPath, element)).replaceAll(path.sep, '/').toString();
+                array[index] = stFile;
+            });
+            console.log(ignoreList);
+            walk(stdLessPath, function (err, results) {
+                if (err) throw err;
+                //Gennerate new file names
+                results.forEach(function (result) {
+                    var newFile = path.normalize(result.replace(stdLessPath, stdCompilePath)
+                        .replace('.less', '.css'));
+                    mkdirp.sync(getDirName(newFile));
+                    recess(result, opt, function (err, obj) {
                         if (err) {
                             console.error(err);
                         } else {
-                            console.log('saved: ' + newFile);
+                            fs.writeFile(newFile, obj[0].output, function (err) {
+                                if (err) {
+                                    console.error(err);
+                                } else {
+                                    console.log('saved: ' + newFile);
+                                }
+                            });
                         }
                     });
-                }
+                });
             });
-        });
+        }
     });
 };
 

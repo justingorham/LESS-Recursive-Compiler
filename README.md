@@ -7,10 +7,13 @@ LESS-Recursive-Compiler is a node module that programatically compiles all of th
 Version
 ----
 
-0.0.6
+0.0.7
 
 Updates
 -----------
+0.0.7
+* ignoreFile list items are now in the form of glob patterns
+
 0.0.6
 * Fixed ignore file/dir bug that would have erroneously ignored the wrong files in certain situations
 
@@ -25,8 +28,12 @@ Tech
 
 LESS-Recursive-Compiler uses the following npm modules
 
+* [globby] - Used for matching files
 * [recess] - Twitter's CSS Hinter
 * [mkdirp] - Recursively mkdir, like `mkdir -p` for node.js
+* [string] - nice string utility
+* [underscore] - holy javascript utility belt batman!
+
 
 
 Installation
@@ -69,7 +76,10 @@ MIT
 
 Written at [Dillinger]
 
+[globby]:https://www.npmjs.org/search?q=globby
 [recess]:http://twitter.github.io/recess/
 [mkdirp]:https://www.npmjs.org/package/mkdirp
+[string]:https://www.npmjs.org/package/string
+[underscore]:http://underscorejs.org/
 [dillinger]:http://dillinger.io/
 
