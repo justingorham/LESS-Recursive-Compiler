@@ -7,10 +7,13 @@ LESS-Recursive-Compiler is a node module that programatically compiles all of th
 Version
 ----
 
-0.0.7
+0.0.8
 
 Updates
 -----------
+0.0.8
+* got rid of "toLowerCase()" calls since directories and files in *nix systems are case sensitive.
+
 0.0.7
 * ignoreFile list items are now in the form of glob patterns
 

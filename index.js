@@ -11,8 +11,8 @@ var lessExt = /.*\.less$|.*\.css/;
 var baseDir, ignoreList;
 
 var shouldIgnoreFile = function (file) {
-    var stFile = file.trim().toLowerCase();
-    stFile = S(stFile.trim().toLowerCase()).replaceAll(path.sep, '/').toString();
+    var stFile = file.trim();
+    stFile = S(stFile.trim()).replaceAll(path.sep, '/').toString();
     return ignoreList.indexOf(stFile) > -1;
 };
 
@@ -52,12 +52,12 @@ compileObject.compile = function (lessPath, compilePath, options) {
     var opt = options || {};
     opt.compile = true;
 
-    var stdLessPath = baseDir = path.normalize(lessPath.trim().toLowerCase());
-    var stdCompilePath = path.normalize(compilePath.trim().toLowerCase());
+    var stdLessPath = baseDir = path.normalize(lessPath.trim());
+    var stdCompilePath = path.normalize(compilePath.trim());
 
     var tempIgnoreList = opt.ignoreList || [];
     tempIgnoreList.forEach(function (element, index, array) {
-        var stFile = S(path.normalize(element.trim().toLowerCase())).replaceAll(path.sep, '/').toString();
+        var stFile = S(path.normalize(element.trim())).replaceAll(path.sep, '/').toString();
         if (stFile.indexOf('/') === 0)
             stFile = stFile.substring(1);
         console.log(stFile);
