@@ -7,11 +7,11 @@ LESS-Recursive-Compiler is a node module that programatically compiles all of th
 Version
 ----
 
-1.0.0
+1.0.2
 
 Updates
 -----------
-1.0.0
+1.0.2
 * now using less directly instead of recess 
 
 0.0.8
@@ -35,10 +35,10 @@ Tech
 LESS-Recursive-Compiler uses the following npm modules
 
 * [globby] - Used for matching files
-* [recess] - Twitter's CSS Hinter
+* [LESS] - CSS pre-processor
 * [mkdirp] - Recursively mkdir, like `mkdir -p` for node.js
 * [string] - nice string utility
-* [underscore] - holy javascript utility belt batman!
+* [lodash] - A JavaScript utility library delivering consistency, modularity, performance, & extras.
 
 
 
@@ -84,6 +84,6 @@ MIT
 [recess]:http://twitter.github.io/recess/
 [mkdirp]:https://www.npmjs.org/package/mkdirp
 [string]:https://www.npmjs.org/package/string
-[underscore]:http://underscorejs.org/
+[lodash]:https://lodash.com/
 [dillinger]:http://dillinger.io/
 
