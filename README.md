@@ -7,10 +7,13 @@ LESS-Recursive-Compiler is a node module that programatically compiles all of th
 Version
 ----
 
-0.0.8
+1.0.0
 
 Updates
 -----------
+1.0.0
+* now using less directly instead of recess 
+
 0.0.8
 * got rid of "toLowerCase()" calls since directories and files in *nix systems are case sensitive.
 
@@ -52,13 +55,12 @@ How to use
 ```sh
 require('less-recursive-compiler').compile(lessDirPath, compiledDirPath, [options])
 ```
-The options are very similar to the [Recess] programatic api options.
+The options are very the same as the [LESS] programatic api options.
 
 
 Available options and their defaults:
 
 - compress - false
-- includePath - []
 - noIDs - true
 - noJSPrefix - true
 - noOverqualifying - true
@@ -77,8 +79,7 @@ MIT
 
 **Free Software, Hell Yeah!**
 
-Written at [Dillinger]
-
+[LESS]:http://lesscss.org/usage/#programmatic-usage
 [globby]:https://www.npmjs.org/search?q=globby
 [recess]:http://twitter.github.io/recess/
 [mkdirp]:https://www.npmjs.org/package/mkdirp

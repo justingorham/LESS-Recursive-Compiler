@@ -1,11 +1,11 @@
 var fs = require('fs'),
     globby = require('globby'),
-    recess = require('recess'),
+    less = require('less'),
     path = require('path'),
     getDirName = path.dirname,
     mkdirp = require('mkdirp'),
-    S = require('string');
-_ = require('underscore');
+    S = require('string'),
+    _ = require('lodash');
 
 var lessExt = /.*\.less$|.*\.css/;
 var baseDir, ignoreList;
@@ -51,6 +51,9 @@ var compileObject = {};
 compileObject.compile = function (lessPath, compilePath, options) {
     var opt = options || {};
     opt.compile = true;
+    if (opt.paths) {
+        delete opt.paths;
+    }
 
     var stdLessPath = baseDir = path.normalize(lessPath.trim());
     var stdCompilePath = path.normalize(compilePath.trim());
@@ -60,7 +63,6 @@ compileObject.compile = function (lessPath, compilePath, options) {
         var stFile = S(path.normalize(element.trim())).replaceAll(path.sep, '/').toString();
         if (stFile.indexOf('/') === 0)
             stFile = stFile.substring(1);
-        console.log(stFile);
         array[index] = stFile;
     });
 
@@ -77,25 +79,26 @@ compileObject.compile = function (lessPath, compilePath, options) {
                 var stFile = S(path.join(standardizedLessPath, element)).replaceAll(path.sep, '/').toString();
                 array[index] = stFile;
             });
-            console.log(ignoreList);
             walk(stdLessPath, function (err, results) {
                 if (err) throw err;
                 //Gennerate new file names
                 results.forEach(function (result) {
                     var newFile = path.normalize(result.replace(stdLessPath, stdCompilePath)
                         .replace('.less', '.css'));
-                    mkdirp.sync(getDirName(newFile));
-                    recess(result, opt, function (err, obj) {
-                        if (err) {
-                            console.error(err);
-                        } else {
-                            fs.writeFile(newFile, obj[0].output, function (err) {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    console.log('saved: ' + newFile);
-                                }
-                            });
+                    var dirName = getDirName(newFile);
+                    mkdirp.sync(dirName);
+                    fs.readFile(result, 'utf8', function (err, data) {
+                        if (!err) {
+                            var thisOpts = _.extend({paths: [getDirName(result)]}, opt);
+                            less.render(data, thisOpts)
+                                .then(function (output) {
+                                    fs.writeFile(newFile, output.css, function (err) {
+                                        console.log(err || 'Created: ' + newFile)
+                                    });
+                                },
+                                function (error) {
+                                    console.log(error);
+                                });
                         }
                     });
                 });
