@@ -11,6 +11,9 @@ Version
 
 Updates
 -----------
+1.0.3
+* bug fixes and dependency updates
+
 1.0.2
 * now using less directly instead of recess 
 

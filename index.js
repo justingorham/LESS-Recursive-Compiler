@@ -8,15 +8,14 @@ var fs = require('fs'),
     _ = require('lodash');
 
 var lessExt = /.*\.less$|.*\.css/;
-var baseDir, ignoreList;
 
-var shouldIgnoreFile = function (file) {
+var shouldIgnoreFile = function (file, ignoreList) {
     var stFile = file.trim();
     stFile = S(stFile.trim()).replaceAll(path.sep, '/').toString();
     return ignoreList.indexOf(stFile) > -1;
 };
 
-var walk = function (dir, done) {
+var walk = function (dir, ignoreList, done) {
     var results = [];
     fs.readdir(dir, function (err, list) {
         if (err) return done(err);
@@ -25,12 +24,12 @@ var walk = function (dir, done) {
             var file = list[i++];
             if (!file) return done(null, results);
             file = dir + '/' + file;
-            if (shouldIgnoreFile(file)) {
+            if (shouldIgnoreFile(file, ignoreList)) {
                 next();
             } else {
                 fs.stat(file, function (err, stat) {
                     if (stat && stat.isDirectory()) {
-                        walk(file, function (err, res) {
+                        walk(file, ignoreList, function (err, res) {
                             results = results.concat(res);
                             next();
                         });
@@ -55,7 +54,7 @@ compileObject.compile = function (lessPath, compilePath, options) {
         delete opt.paths;
     }
 
-    var stdLessPath = baseDir = path.normalize(lessPath.trim());
+    var stdLessPath = path.normalize(lessPath.trim());
     var stdCompilePath = path.normalize(compilePath.trim());
 
     var tempIgnoreList = opt.ignoreList || [];
@@ -74,12 +73,11 @@ compileObject.compile = function (lessPath, compilePath, options) {
         if (err) {
             throw err;
         } else {
-            ignoreList = paths.slice(0);
+            var ignoreList = paths.slice(0);
             ignoreList.forEach(function (element, index, array) {
-                var stFile = S(path.join(standardizedLessPath, element)).replaceAll(path.sep, '/').toString();
-                array[index] = stFile;
+                array[index] = S(path.join(standardizedLessPath, element)).replaceAll(path.sep, '/').toString();
             });
-            walk(stdLessPath, function (err, results) {
+            walk(stdLessPath, ignoreList, function (err, results) {
                 if (err) throw err;
                 //Gennerate new file names
                 results.forEach(function (result) {

@@ -1,6 +1,6 @@
 {
   "name": "less-recursive-compiler",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Node module that recursively compiles all LESS files in a directory",
   "main": "index.js",
   "scripts": {
@@ -15,11 +15,11 @@
   "author": "Justin Gorham <justingorham@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "globby": "^0.1.1",
-    "less": "^2.3.1",
+    "globby": "^1.2.0",
+    "less": "^2.4.0",
     "mkdirp": "^0.5.0",
-    "string": "^2.2.0",
-    "lodash": "3.1.0"
+    "string": "^3.0.0",
+    "lodash": "3.4.0"
   },
   "devDependencies": {},
   "repository": {
